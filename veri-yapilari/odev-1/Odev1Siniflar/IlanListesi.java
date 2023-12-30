@@ -1,5 +1,8 @@
 // İlan listesi sınıfı. Sadece belirtilen satırdan sonra değişiklik yapınız
 // İstisna olarak üste import ifadeleri eklenebilir.
+
+import java.util.*;
+
 public class IlanListesi {
     // İlan listesini tutan değişken, dışarda oluşturulup constructor ile atanır.
     private DoublyLinkedList<IsIlani> ilanlar;
@@ -18,7 +21,19 @@ public class IlanListesi {
      * @return Ücreti en büyük aktif ilan
      */
     public IsIlani enBuyukUcretliAktifIlan() {
-        return null;
+
+        DoublyLinkedList<IsIlani> jobList = getIlanlar();
+        IsIlani greatestIncomeJob = jobList.getHead().value;
+
+        for (IsIlani job:jobList) {
+
+            if (job.getUcret() > greatestIncomeJob.getUcret()) {
+                greatestIncomeJob = job;
+            }
+
+        }
+
+        return greatestIncomeJob;
     }
     /**
      * İş tanımı içinde aranan sözcüğün kaç ilanda geçtiğini veren metot
@@ -27,7 +42,18 @@ public class IlanListesi {
      * @return Aranan sözcüğün geçtiği ilan sayısı
      */
     public int isTanimindaSozcukGecenIlanSayisi(String arananSozcuk) {
-        return -1;
+
+        int result = 0;
+        DoublyLinkedList<IsIlani> jobList = getIlanlar();
+
+        for (IsIlani job:jobList) {
+
+            if (job.getIsTanimi().contains(arananSozcuk)) {
+                result++;
+            }
+        }
+
+        return result;
     }
     /**
      * İş süreleri küçükten büyüğe sıralandığında k. sırada olan işin süresini veren metot,
@@ -38,7 +64,16 @@ public class IlanListesi {
      * @return İş süreleri küçükten büyüğe sıralandığında k. sırada olan işin süresi
      */
     public int isSuresiEnAzKinciIsinSuresi(int k) {
-        return -1;
+
+        ArrayList<Integer> workTimeList = new ArrayList<>(); 
+        DoublyLinkedList<IsIlani> jobList = getIlanlar();
+
+        for (IsIlani job:jobList) {
+            workTimeList.add(job.getIsSuresi());
+        }
+        
+        Collections.sort(workTimeList, Comparator.naturalOrder());
+        return workTimeList.get(k);
     }
 
     /**
@@ -48,6 +83,14 @@ public class IlanListesi {
      * @return İçindeki ilanların ücret toplamı en çok olan kategori
      */
     public String ucretToplamiEnBuyukKategori() {
-        return null;
+
+        DoublyLinkedList<IsIlani> jobList = getIlanlar();
+        SortedMap<Double,String> jobMap = new TreeMap<>();
+
+        for (IsIlani job:jobList) {
+            jobMap.put(job.getUcret(),job.getKategori());
+        }
+
+        return jobMap.get(jobMap.lastKey()); // natural order
     }
 }
